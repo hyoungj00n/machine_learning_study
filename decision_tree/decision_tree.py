@@ -17,7 +17,7 @@ from pprint import pprint
 
 
 # Import the dataset and define the feature as well as the target datasets / columns#
-dataset = pd.read_csv('data/zoo.csv',
+dataset = pd.read_csv('./zoo.csv',
                       names=['animal_name','hair','feathers','eggs','milk',
                      'airbone','aquatic','predator','toothed','backbone',
                      'breathes','venomous','fins','legs','tail','domestic','catsize','class',])
