@@ -39,9 +39,10 @@ def entropy(target_col):
     The only parameter of this function is the target_col parameter which specifies the target column
     """
     elements, counts = np.unique(target_col, return_counts = True)
-    
-    # 아래 코드를 자신만의 코드로 변경하고, 결과를 확인해 봅시다.     
-    entropy = np.sum([(-counts[i] / np.sum(counts)) * np.log2(counts[i] / np.sum(counts)) for i in range(len(elements))])
+
+
+    probability = counts / np.sum(counts)
+    entropy = np.sum([(-p) * np.log2(p) for p in probability if p > 0])
 
     return entropy
 
@@ -60,10 +61,12 @@ def InfoGain(data,split_attribute_name,target_name="class"):
     
     #Calculate the values and the corresponding counts for the split attribute 
     vals, counts= np.unique(data[split_attribute_name],return_counts=True)
-    
-    #Calculate the weighted entropy - 아래 코드를 자신만의 코드로 변경하고, 결과를 확인해 봅시다. 
-    Weighted_Entropy = np.sum([(counts[i] / np.sum(counts)) * entropy(data.where(data[split_attribute_name] == vals[i]).dropna()[target_name]) \
-                               for i in range(len(vals))])
+
+    probabilities = counts / np.sum(counts)
+    Weighted_Entropy = np.sum([probability * entropy(data[data[split_attribute_name] == val][target_name]) for val, probability in zip(vals, probabilities)])
+
+    #Weighted_Entropy = np.sum([(counts[i] / np.sum(counts)) * entropy(data.where(data[split_attribute_name] == vals[i]).dropna()[target_name]) \
+    #                           for i in range(len(vals))])
     
     #Calculate the information gain
     Information_Gain = total_entropy - Weighted_Entropy
